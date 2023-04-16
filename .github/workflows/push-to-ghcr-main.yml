@@ -36,6 +36,7 @@ jobs:
           path: /tmp/image.tar
   
   upload:
+    depends-on: build
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
