@@ -48,16 +48,16 @@ jobs:
       - name: Push (develop) to GitHub Packages
         if: ${{ github.ref == 'refs/heads/develop' }}
         run: |
-          docker tag oliveman/csprimer-ide:${{ github.sha }} ghcr.io/oliveman/csprimer-ide:develop
-          docker push ghcr.io/oliveman/csprimer-ide:develop
+          docker tag oliveman/csprimer-ide:${{ github.sha }} ghcr.io/lisgar-csprimer/ide:develop
+          docker push ghcr.io/lisgar-csprimer/ide:develop
 
       - name: Push (latest) to GitHub Packages
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          docker tag oliveman/csprimer-ide:${{ github.sha }} ghcr.io/oliveman/csprimer-ide:${{ github.sha }}
-          docker tag oliveman/csprimer-ide:latest ghcr.io/oliveman/csprimer-ide:latest
-          docker push ghcr.io/oliveman/csprimer-ide:${{ github.sha }}
-          docker push ghcr.io/oliveman/csprimer-ide:latest
+          docker tag lisgar-csprimer/ide:${{ github.sha }} ghcr.io/lisgar-csprimer/ide:${{ github.sha }}
+          docker tag lisgar-csprimer/ide:latest ghcr.io/lisgar-csprimer/ide:latest
+          docker push ghcr.io/lisgar-csprimer/ide:${{ github.sha }}
+          docker push ghcr.io/lisgar-csprimer/ide:latest
 
       - name: Tag main as latest
         if: ${{ github.ref == 'refs/heads/main' }}
