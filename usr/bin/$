@@ -1,0 +1,2 @@
+echo "You pasted a '$' as a command. The '$' is not part of the command, and should be removed."
+echo "Learn more: https://ubuntu.com/tutorials/command-line-for-beginners"

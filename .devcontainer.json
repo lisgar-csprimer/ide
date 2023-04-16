@@ -1,0 +1,70 @@
+{
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"],
+      "settings": {
+        "files.eol": "\n",
+        "editor.fontFamily": "JetBrains Mono",
+        "editor.fontLigatures": true,
+        "workbench.colorTheme": "One Dark Pro Darker",
+        "workbench.iconTheme": "material-icon-theme",
+        "terminal.integrated.fontFamily": "MesloLGS Nerd Font",
+        "terminal.integrated.cursorStyle": "underline",
+        "editor.detectIndentation": false,
+        "git.enableSmartCommit": true,
+        "git.confirmSync": false,
+        "python.linting.enabled": true,
+        "python.linting.flake8Enabled": true,
+        "files.associations": {
+          "**/requirements{/**,*}.{txt,in}": "pip-requirements",
+          "Procfile": "yaml",
+          "*.windows": "yaml",
+          ".env.local": "env",
+          "*.toml": "toml",
+          "*.css": "tailwindcss",
+          ".env": "dotenv"
+        },
+        "editor.tabSize": 2,
+        "[python]": {
+          "editor.tabSize": 4,
+          "editor.formatOnType": true
+        },
+        "typescript.updateImportsOnFileMove.enabled": "always",
+        "editor.accessibilitySupport": "off",
+        "[jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "files.autoSave": "afterDelay",
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[c]": {
+          "editor.tabSize": 4
+        }
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "forwardPorts": [
+    5000, // Flask
+    5900, // VNC server
+    6081, // VNC client
+    8080, // http-server
+    8082 // phpLiteAdmin
+  ],
+  "image": "ghcr.io/cs50/codespace",
+  "postCreateCommand": "/opt/cs50/bin/postCreateCommand",
+  "remoteEnv": {
+    "CS50_GH_USER": "${localEnv:GITHUB_USER}",
+    "GH_TOKEN": "${localEnv:CS50_TOKEN}",
+    "TZ": "${localEnv:CS50_TZ}"
+  }
+}
