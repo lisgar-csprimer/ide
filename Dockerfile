@@ -1,5 +1,5 @@
 FROM ubuntu:22.04
-LABEL maintainer="sysadmins@cs50.harvard.edu"
+LABEL maintainer="oaude1@ocdsb.ca"
 ARG DEBIAN_FRONTEND=noninteractive
 
 
