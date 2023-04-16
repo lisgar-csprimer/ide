@@ -22,9 +22,9 @@ jobs:
           build-args: |
             VCS_REF=${{ github.sha }}
           load: true
-          tags: csprimer/ide:${{ github.sha }},csprimer/ide:develop
-          cache-from: type=registry,ref=csprimer/ide:buildcache-develop
-          cache-to: type=registry,ref=csprimer/ide:buildcache-develop,mode=max
+          tags: oliveman/csprimer-ide:${{ github.sha }},oliveman/csprimer-ide:develop
+          cache-from: type=registry,ref=oliveman/csprimer-ide:buildcache-develop
+          cache-to: type=registry,ref=oliveman/csprimer-ide:buildcache-develop,mode=max
 
       - name: Build (latest)
         uses: docker/build-push-action@v3
@@ -33,9 +33,9 @@ jobs:
           build-args: |
             VCS_REF=${{ github.sha }}
           load: true
-          tags: csprimer/ide:${{ github.sha }},csprimer/ide:latest
-          cache-from: type=registry,ref=csprimer/ide:buildcache
-          cache-to: type=registry,ref=csprimer/ide:buildcache,mode=max
+          tags: oliveman/csprimer-ide:${{ github.sha }},oliveman/csprimer-ide:latest
+          cache-from: type=registry,ref=oliveman/csprimer-ide:buildcache
+          cache-to: type=registry,ref=oliveman/csprimer-ide:buildcache,mode=max
 
       - name: Log into GitHub Packages
         if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
@@ -48,16 +48,16 @@ jobs:
       - name: Push (develop) to GitHub Packages
         if: ${{ github.ref == 'refs/heads/develop' }}
         run: |
-          docker tag csprimer/ide:${{ github.sha }} ghcr.io/csprimer/ide:develop
-          docker push ghcr.io/csprimer/ide:develop
+          docker tag oliveman/csprimer-ide:${{ github.sha }} ghcr.io/oliveman/csprimer-ide:develop
+          docker push ghcr.io/oliveman/csprimer-ide:develop
 
       - name: Push (latest) to GitHub Packages
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          docker tag csprimer/ide:${{ github.sha }} ghcr.io/csprimer/ide:${{ github.sha }}
-          docker tag csprimer/ide:latest ghcr.io/csprimer/ide:latest
-          docker push ghcr.io/csprimer/ide:${{ github.sha }}
-          docker push ghcr.io/csprimer/ide:latest
+          docker tag oliveman/csprimer-ide:${{ github.sha }} ghcr.io/oliveman/csprimer-ide:${{ github.sha }}
+          docker tag oliveman/csprimer-ide:latest ghcr.io/oliveman/csprimer-ide:latest
+          docker push ghcr.io/oliveman/csprimer-ide:${{ github.sha }}
+          docker push ghcr.io/oliveman/csprimer-ide:latest
 
       - name: Tag main as latest
         if: ${{ github.ref == 'refs/heads/main' }}
