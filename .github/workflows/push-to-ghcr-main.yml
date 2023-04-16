@@ -1,7 +1,9 @@
 # From https://github.com/cs50/ide/blob/main/.github/workflows/main.yml
 on:
-  - push
-  - workflow_dispatch
+  push:
+    branches:
+      - main
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,18 +17,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build (develop)
-        uses: docker/build-push-action@v3
-        if: ${{ github.ref == 'refs/heads/develop' }}
-        with:
-          build-args: |
-            VCS_REF=${{ github.sha }}
-          load: true
-          tags: oliveman/csprimer-ide:${{ github.sha }},oliveman/csprimer-ide:develop
-          cache-from: type=registry,ref=oliveman/csprimer-ide:buildcache-develop
-          cache-to: type=registry,ref=oliveman/csprimer-ide:buildcache-develop,mode=max
-
-      - name: Build (latest)
+      - name: Build and export
         uses: docker/build-push-action@v3
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
@@ -36,6 +27,22 @@ jobs:
           tags: oliveman/csprimer-ide:${{ github.sha }},oliveman/csprimer-ide:latest
           cache-from: type=registry,ref=oliveman/csprimer-ide:buildcache
           cache-to: type=registry,ref=oliveman/csprimer-ide:buildcache,mode=max
+          outputs: type=docker,dest=/tmp/image.tar
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: docker-image
+          path: /tmp/image.tar
+  
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: docker-image
+          path: /tmp
 
       - name: Log into GitHub Packages
         if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
@@ -45,13 +52,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push (develop) to GitHub Packages
-        if: ${{ github.ref == 'refs/heads/develop' }}
-        run: |
-          docker tag oliveman/csprimer-ide:${{ github.sha }} ghcr.io/lisgar-csprimer/ide:develop
-          docker push ghcr.io/lisgar-csprimer/ide:develop
-
-      - name: Push (latest) to GitHub Packages
+      - name: Push to GitHub Packages
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           docker tag oliveman/csprimer-ide:${{ github.sha }} ghcr.io/lisgar-csprimer/ide:${{ github.sha }}
@@ -59,6 +60,9 @@ jobs:
           docker push ghcr.io/lisgar-csprimer/ide:${{ github.sha }}
           docker push ghcr.io/lisgar-csprimer/ide:latest
 
+  tag:
+    runs-on: ubuntu-latest
+    steps:
       - name: Tag main as latest
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/github-script@v6
