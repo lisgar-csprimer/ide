@@ -54,8 +54,8 @@ jobs:
       - name: Push (latest) to GitHub Packages
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          docker tag lisgar-csprimer/ide:${{ github.sha }} ghcr.io/lisgar-csprimer/ide:${{ github.sha }}
-          docker tag lisgar-csprimer/ide:latest ghcr.io/lisgar-csprimer/ide:latest
+          docker tag oliveman/csprimer-ide:${{ github.sha }} ghcr.io/lisgar-csprimer/ide:${{ github.sha }}
+          docker tag oliveman/csprimer-ide:latest ghcr.io/lisgar-csprimer/ide:latest
           docker push ghcr.io/lisgar-csprimer/ide:${{ github.sha }}
           docker push ghcr.io/lisgar-csprimer/ide:latest
 
