@@ -1,0 +1,83 @@
+# From https://github.com/cs50/ide/blob/main/.github/workflows/main.yml
+on:
+  - push
+  - workflow_dispatch
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log into Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build (develop)
+        uses: docker/build-push-action@v3
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        with:
+          build-args: |
+            VCS_REF=${{ github.sha }}
+          load: true
+          tags: csprimer/ide:${{ github.sha }},csprimer/ide:develop
+          cache-from: type=registry,ref=csprimer/ide:buildcache-develop
+          cache-to: type=registry,ref=csprimer/ide:buildcache-develop,mode=max
+
+      - name: Build (latest)
+        uses: docker/build-push-action@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          build-args: |
+            VCS_REF=${{ github.sha }}
+          load: true
+          tags: csprimer/ide:${{ github.sha }},csprimer/ide:latest
+          cache-from: type=registry,ref=csprimer/ide:buildcache
+          cache-to: type=registry,ref=csprimer/ide:buildcache,mode=max
+
+      - name: Log into GitHub Packages
+        if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push (develop) to GitHub Packages
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        run: |
+          docker tag csprimer/ide:${{ github.sha }} ghcr.io/csprimer/ide:develop
+          docker push ghcr.io/csprimer/ide:develop
+
+      - name: Push (latest) to GitHub Packages
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: |
+          docker tag csprimer/ide:${{ github.sha }} ghcr.io/csprimer/ide:${{ github.sha }}
+          docker tag csprimer/ide:latest ghcr.io/csprimer/ide:latest
+          docker push ghcr.io/csprimer/ide:${{ github.sha }}
+          docker push ghcr.io/csprimer/ide:latest
+
+      - name: Tag main as latest
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            try {
+              await github.rest.git.updateRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "tags/latest",
+                sha: context.sha,
+                force: true
+              })
+            } catch (e) {
+              await github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: "refs/tags/latest",
+                sha: context.sha
+              })
+            }
