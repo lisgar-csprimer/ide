@@ -1,14 +1,23 @@
 {
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python"],
+      "extensions": [
+        "donjayamanne.python-extension-pack",
+        "ms-vscode.cpptools",
+        "CS50.ddb50",
+        "wmaurer.change-case",
+        "zhuangtongfa.material-theme",
+        "ionutvmi.path-autocomplete",
+        "ms-toolsai.jupyter",
+        "mechatroner.rainbow-csv"
+      ],
       "settings": {
         "files.eol": "\n",
         "editor.fontFamily": "JetBrains Mono",
         "editor.fontLigatures": true,
         "workbench.colorTheme": "One Dark Pro Darker",
         "workbench.iconTheme": "material-icon-theme",
-        "terminal.integrated.fontFamily": "MesloLGS Nerd Font",
+        "terminal.integrated.fontFamily": "JetBrains Mono",
         "terminal.integrated.cursorStyle": "underline",
         "editor.detectIndentation": false,
         "git.enableSmartCommit": true,
@@ -41,8 +50,9 @@
         "[typescriptreact]": {
           "editor.defaultFormatter": "esbenp.prettier-vscode"
         },
-        "[json]": {
-          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "[json][jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.tabSize": 2
         },
         "[c]": {
           "editor.tabSize": 4
@@ -55,16 +65,7 @@
   },
   "forwardPorts": [
     5000, // Flask
-    5900, // VNC server
-    6081, // VNC client
-    8080, // http-server
-    8082 // phpLiteAdmin
+    8080 // http-server
   ],
-  "image": "ghcr.io/cs50/codespace",
-  "postCreateCommand": "/opt/cs50/bin/postCreateCommand",
-  "remoteEnv": {
-    "CS50_GH_USER": "${localEnv:GITHUB_USER}",
-    "GH_TOKEN": "${localEnv:CS50_TOKEN}",
-    "TZ": "${localEnv:CS50_TZ}"
-  }
+  "image": "ghcr.io/csprimer/ide"
 }
