@@ -1,5 +1,6 @@
 FROM ubuntu:22.04
 LABEL maintainer="oaude1@ocdsb.ca"
+LABEL org.opencontainers.image.source=https://github.com/lisgar-csprimer/ide
 ARG DEBIAN_FRONTEND=noninteractive
 
 
