@@ -27,13 +27,13 @@ jobs:
           tags: oliveman/csprimer-ide:${{ github.sha }},oliveman/csprimer-ide:latest
           cache-from: type=registry,ref=oliveman/csprimer-ide:buildcache
           cache-to: type=registry,ref=oliveman/csprimer-ide:buildcache,mode=max
-          outputs: type=docker,dest=/tmp/image.tar
+          outputs: type=docker,dest=/tmp/csprimer-ide.tar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
           name: docker-image
-          path: /tmp/image.tar
+          path: /tmp/csprimer-ide.tar
   
   upload:
     needs: build
@@ -44,6 +44,9 @@ jobs:
         with:
           name: docker-image
           path: /tmp
+
+      - name: Load image
+        run: docker load -i /tmp/csprimer-ide.tar
 
       - name: Log into GitHub Packages
         if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
